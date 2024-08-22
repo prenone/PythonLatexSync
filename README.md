@@ -16,7 +16,5 @@ From the **Upload dialog** select **From external URL** and add the URL that is 
 
 When the assets is pushed from Python it can be pulled from Overleaf by just pressing the **Refresh** button for that asset.
 
-# Overleaf usage
-
 # API Docs
 [https://pythonlatexsync.achilleme.com/docs](https://pythonlatexsync.achilleme.com/docs)
