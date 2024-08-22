@@ -1,7 +1,9 @@
 import os
+from multiprocessing import Value
 from flask import Flask, render_template, send_file, request, abort, make_response
 from dataclasses import dataclass
 import base64
+from ctypes import c_int
 
 app = Flask(__name__)
 
@@ -19,8 +21,8 @@ os.makedirs(dirname, exist_ok=True)
 open(users_filename, 'a').close()
 os.makedirs(storage_directory, exist_ok=True)
 
-push_count = 0
-pull_count = 0
+push_count = Value(c_int, 0)
+pull_count = Value(c_int, 0)
 
 # Loads users
 def load_users():
@@ -46,7 +48,8 @@ def load_users():
 
 @app.route('/')
 def index():
-    return render_template('index.html', push_count=push_count, pull_count=pull_count)
+    with push_count.get_lock(), pull_count.get_lock():
+        return render_template('index.html', push_count=push_count.value, pull_count=pull_count.value)
 
 @app.route('/docs')
 def docs():
@@ -70,8 +73,8 @@ def push_file(user, write_password, filename):
     
     file.save(filepath)
 
-    global push_count
-    push_count += 1
+    with push_count.get_lock():
+        push_count.value += 1
 
     print(f'Saving "{filename}" in storage for user "{user}". Request ip address: {request.remote_addr}')
     return 'File saved successfully', 200
@@ -90,8 +93,8 @@ def pull_file(user, read_password, filename):
     if not os.path.exists(filepath):
         abort(404, 'File not found for the user')
 
-    global pull_count
-    pull_count += 1
+    with pull_count.get_lock():
+        pull_count.value += 1
 
     print(f'Serving "{requested_filename}" to user "{user}" Request ip address: {request.remote_addr}')
     response = make_response(send_file(filepath, as_attachment=True, download_name=requested_filename))
