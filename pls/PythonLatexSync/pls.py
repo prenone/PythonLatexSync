@@ -1,7 +1,7 @@
 import requests
 
 class PLS:
-    def __init__(self, user, write_password, read_password, server_url='http://127.0.0.1:5000'):
+    def __init__(self, user, write_password, read_password, server_url):
         self.user = user
         self.write_password = write_password
         self.read_password = read_password
