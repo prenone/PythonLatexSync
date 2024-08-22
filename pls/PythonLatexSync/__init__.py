@@ -1,0 +1,2 @@
+from .pls import PLS
+

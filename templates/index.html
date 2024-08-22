@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PythonLatexSync</title>
+    <style>
+        /* Background animation */
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(45deg, #ff9a9e, #19dcea);
+            background-size: 400% 400%;
+            animation: gradientBG 10s ease infinite;
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            color: #3b3b3b;
+            text-align: center;
+            box-sizing: border-box;
+        }
+
+        /* Animation keyframes */
+        @keyframes gradientBG {
+            0% {
+                background-position: 0% 50%;
+                background-color: #ff9a9e;
+            }
+            50% {
+                background-position: 100% 50%;
+                background-color: #19dcea;
+            }
+            100% {
+                background-position: 0% 50%;
+                background-color: #ff9a9e;
+            }
+        }
+
+        /* Content container */
+        .container {
+            max-width: 600px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        /* Title */
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+        }
+
+        /* Icons positioned in the corners */
+        .icon {
+            width: 40px;
+            height: 40px;
+            position: absolute;
+            bottom: 20px;
+        }
+
+        .icon-latex {
+            left: 20px;
+        }
+
+        .icon-python {
+            right: 20px;
+        }
+
+        /* Counters positioned below the container */
+        .counters {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 0 20px;
+        }
+
+        .counter {
+            font-size: 1.2em;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 5px 15px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2em;
+            }
+
+            p {
+                font-size: 1em;
+            }
+
+            .icon {
+                width: 30px;
+                height: 30px;
+            }
+
+            .icon-latex {
+                left: 10px;
+            }
+
+            .icon-python {
+                right: 10px;
+            }
+
+            .counter {
+                font-size: 1em;
+                padding: 5px;
+            }
+
+            .docs-link {
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>PythonLatexSync</h1>
+        <p>A seamless service that provides automatic, real-time synchronization from your Python scripts to Overleaf documents. Enhance your workflow by keeping your code and LaTeX documents perfectly in sync, without any manual copy-pasting.</p>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/9/92/LaTeX_logo.svg" alt="LaTeX Logo" class="icon icon-latex">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/c/c3/Python-logo-notext.svg" alt="Python Logo" class="icon icon-python">
+    </div>
+    <div class="counters">
+        <div class="counter">Push: {{ push_count }}</div>
+        <div class="counter">Pull: {{ pull_count }}</div>
+    </div>
+    <a href="/docs" class="docs-link">View Documentation</a>
+</body>
+</html>
+

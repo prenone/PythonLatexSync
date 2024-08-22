@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background: #e7e7e7;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        pre {
+            background: #e7e7e7;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .endpoint {
+            margin-top: 20px;
+        }
+        .method {
+            font-weight: bold;
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Documentation</h1>
+        <p>This API allows users to push and pull files with authentication. Below is a description of the available endpoints and how to use them.</p>
+        
+        <div class="endpoint">
+            <h2>1. Upload a File (Push)</h2>
+            <p><span class="method">POST</span> <code>/push/&lt;user&gt;/&lt;write_password&gt;/&lt;filename&gt;</code></p>
+            <p>Uploads a file to the server after verifying the user's write permissions.</p>
+            
+            <h3>Parameters</h3>
+            <ul>
+                <li><code>user</code>: The username for authentication.</li>
+                <li><code>write_password</code>: The password for write access.</li>
+                <li><code>filename</code>: The name of the file to be saved on the server.</li>
+            </ul>
+            
+            <h3>Request Example (Using <code>curl</code>)</h3>
+            <pre><code>curl -X POST -F "file=@/path/to/your/file.txt" http://127.0.0.1:5000/push/admin/write_secret/file.txt</code></pre>
+        </div>
+        
+        <div class="endpoint">
+            <h2>2. Download a File (Pull)</h2>
+            <p><span class="method">GET</span> <code>/pull/&lt;user&gt;/&lt;read_password&gt;/&lt;filename&gt;</code></p>
+            <p>Downloads a file from the server after verifying the user's read permissions.</p>
+            
+            <h3>Parameters</h3>
+            <ul>
+                <li><code>user</code>: The username for authentication.</li>
+                <li><code>read_password</code>: The password for read access.</li>
+                <li><code>filename</code>: The name of the file to be downloaded. Note that the file will always be downloaded as <code>lol.txt</code>.</li>
+            </ul>
+            
+            <h3>Request Example (Using <code>curl</code>)</h3>
+            <pre><code>curl -O http://127.0.0.1:5000/pull/admin/read_secret/file.txt</code></pre>
+        </div>
+        
+        <div class="endpoint">
+            <h2>Security and Headers</h2>
+            <p>When downloading files using the <code>GET /pull</code> endpoint, caching is completely disabled to ensure the file is always fetched fresh from the server.</p>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,32 @@
+# Ignore the virtual environment
+venv/
+.env/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore Git-related files
+.git/
+.gitignore
+
+# Ignore distribution and packaging files
+build/
+dist/
+*.egg-info/
+
+# Ignore local data files
+data/user.txt
+data/storage/
+
+# Ignore IDE-specific files
+.vscode/
+.idea/
+
+# Ignore logs
+*.log
+
+# Ignore MacOS-specific files
+.DS_Store
+
+*.tar
