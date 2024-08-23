@@ -1,5 +1,7 @@
 [PhysLatexSync](https://pythonlatexsync.achilleme.com/) hosted on my server.
 
+[Youtube Tutorial](https://youtu.be/vPJn6n5nmtM) for installation and simple usage.
+
 # PythonLatexSync
 A seamless service that provides automatic, real-time synchronization from your Python scripts to Overleaf documents. Enhance your workflow by keeping your code and LaTeX documents perfectly in sync, without any manual copy-pasting.
 
@@ -18,7 +20,9 @@ When the assets is pushed from Python it can be pulled from Overleaf by just pre
 
 ## Tampermonkey
 This Tampermonkey script `Overleaf.js` adds the "Refresh All Linked items" feature to the file tree toolbar
-![Screenshot](https://achilleme.com/static/pls/overleaf_screenshot.png)
+
+![Screenshot](https://achilleme.com/static/pls/overleaf_screenshot.png) <- new button
+
 This features programmaticallys opens each linked assets and emulates clicking the Refresh button.
 
 # API Docs
