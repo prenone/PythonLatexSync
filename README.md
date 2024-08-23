@@ -1,6 +1,7 @@
 [PhysLatexSync](https://pythonlatexsync.achilleme.com/) hosted on my server.
 
-[Youtube Tutorial](https://youtu.be/vPJn6n5nmtM) for installation and simple usage.
+[Youtube Installation and Usage](https://youtu.be/vPJn6n5nmtM).
+[Youtube Overleaf integration using Tampermonkey](https://youtu.be/AwXVWM-V3pk)
 
 # PythonLatexSync
 A seamless service that provides automatic, real-time synchronization from your Python scripts to Overleaf documents. Enhance your workflow by keeping your code and LaTeX documents perfectly in sync, without any manual copy-pasting.
