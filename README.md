@@ -1,6 +1,7 @@
 [PhysLatexSync](https://pythonlatexsync.achilleme.com/) hosted on my server.
 
 [Youtube Installation and Usage](https://youtu.be/vPJn6n5nmtM).
+
 [Youtube Overleaf integration using Tampermonkey](https://youtu.be/AwXVWM-V3pk)
 
 # PythonLatexSync
