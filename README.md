@@ -16,5 +16,10 @@ From the **Upload dialog** select **From external URL** and add the URL that is 
 
 When the assets is pushed from Python it can be pulled from Overleaf by just pressing the **Refresh** button for that asset.
 
+## Tampermonkey
+This Tampermonkey script `Overleaf.js` adds the "Refresh All Linked items" feature to the file tree toolbar
+![Screenshot](https://achilleme.com/static/pls/overleaf_screenshot.png)
+This features programmaticallys opens each linked assets and emulates clicking the Refresh button.
+
 # API Docs
 [https://pythonlatexsync.achilleme.com/docs](https://pythonlatexsync.achilleme.com/docs)
