@@ -7,6 +7,9 @@
 # PythonLatexSync
 A seamless service that provides automatic, real-time synchronization from your Python scripts to Overleaf documents. Enhance your workflow by keeping your code and LaTeX documents perfectly in sync, without any manual copy-pasting.
 
+## User interface
+I have also added a simple UI accessible at /ui/ with the username and **write_password**.
+
 # Python usage
 Installation is from this Github repo using pip VCS support
 ```
