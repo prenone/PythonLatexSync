@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File List</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f4f4f4;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .file-icon {
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Files for {{ user }}</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>File Size</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+            <tbody>
+            {% for file in files %}
+            <tr>
+                <td><i class="fas fa-file file-icon"></i>{{ file.name }}</td>
+                <td>{{ file.size }} bytes</td>
+                <td><a href="/pull/{{ user }}/{{ read_password }}/{{ file.name }}">Download</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+
+        </table>
+</body>
+</html>
+

@@ -1,6 +1,6 @@
 import os
 from multiprocessing import Value
-from flask import Flask, render_template, send_file, request, abort, make_response
+from flask import Flask, Response, render_template, send_file, request, abort, make_response
 from dataclasses import dataclass
 import base64
 from ctypes import c_int
@@ -109,6 +109,11 @@ def sanitize_filename(filename):
     filename = filename.strip()
     return base64.urlsafe_b64encode(filename.encode('UTF-8')).decode('UTF-8')
 
+def unsanitize_filename(sanitized_filename):
+    decoded_bytes = base64.urlsafe_b64decode(sanitized_filename.encode('UTF-8'))
+    original_filename = decoded_bytes.decode('UTF-8')
+    return original_filename
+
 
 def verify_user_write(user, write_password):
     user = user.strip()
@@ -119,6 +124,47 @@ def verify_user_write(user, write_password):
             return True
 
     return False
+
+@app.route('/ui/', methods=['GET'])
+def user_interface():
+    auth = request.authorization
+    if not auth or not verify_user_write(auth.username, auth.password):
+        return Response('Authentication required', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+    return render_template('ui.html', user=auth.username)
+    
+
+@app.route('/ui/list/', methods=['GET'])
+def list_files():
+    auth = request.authorization
+    if not auth or not verify_user_write(auth.username, auth.password):
+        return Response('Invalid credentials', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+    user = auth.username
+    write_password = auth.password
+    read_password = users[user].read_password
+
+    files = []
+    user_folder = os.path.join(storage_directory, user)
+
+    for filename in os.listdir(user_folder):
+        filepath = os.path.join(user_folder, filename)
+        if os.path.isfile(filepath):
+            file_size = os.path.getsize(filepath)
+            files.append({
+                'name': unsanitize_filename(filename),
+                'size': file_size,
+            })
+
+    return render_template('list.html', files=files, user=user, read_password=read_password)
+
+@app.route('/ui/upload/', methods=['GET'])
+def upload_file():
+    auth = request.authorization
+    if not auth or not verify_user_write(auth.username, auth.password):
+        return Response('Invalid credentials', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+    return render_template('upload.html', user=auth.username, write_password=auth.password)
 
 def verify_user_read(user, read_password):
     user = user.strip()

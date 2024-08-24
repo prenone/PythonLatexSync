@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload File</title>
+    <script>
+        function updateFormAction() {
+            var fileInput = document.getElementById('file');
+            var form = document.getElementById('uploadForm');
+            var fileName = fileInput.files[0].name;
+            var user = "{{ user }}";
+            var writePassword = "{{ write_password }}";
+
+            // Update the form action URL to include the actual filename
+            form.action = `/push/${user}/${writePassword}/${fileName}`;
+        }
+    </script>
+</head>
+<body>
+    <h1>Upload a File</h1>
+    <form id="uploadForm" method="post" enctype="multipart/form-data">
+        <label for="file">Choose file to upload:</label>
+        <input type="file" id="file" name="file" required onchange="updateFormAction()">
+        <br><br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
+
