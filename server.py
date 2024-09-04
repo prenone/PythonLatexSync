@@ -181,6 +181,16 @@ def upload_file():
 
     return render_template('upload.html', user=auth.username, write_password=auth.password)
 
+@app.route('/ui/upload_folder/', methods=['GET'])
+def upload_folder():
+    auth = request.authorization
+    if not auth or not verify_user_write(auth.username, auth.password):
+        return Response('Invalid credentials', 401, {'WWW-Authenticate': 'Basic realm="Login Required"'})
+
+    return render_template('upload_folder.html', user=auth.username, write_password=auth.password)
+
+
+
 def verify_user_read(user, read_password):
     user = user.strip()
     read_password = read_password.strip()
