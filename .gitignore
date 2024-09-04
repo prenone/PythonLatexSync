@@ -166,3 +166,4 @@ bin/
 lib64
 *.tar
 data
+pls/downloaded_*
