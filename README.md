@@ -1,4 +1,4 @@
-[PhysLatexSync](https://pythonlatexsync.achilleme.com/) hosted on my server.
+[PythonLatexSync](https://pythonlatexsync.achilleme.com/) hosted on my server.
 
 [Youtube Installation and Usage](https://youtu.be/vPJn6n5nmtM).
 
