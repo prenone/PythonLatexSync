@@ -1,56 +1,204 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>File List</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
-        table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
 
-        th, td {
-            padding: 10px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
-        }
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
 
-        th {
-            background-color: #f4f4f4;
-        }
+    th {
+      background-color: #f4f4f4;
+    }
 
-        tr:hover {
-            background-color: #f1f1f1;
-        }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
 
-        .file-icon {
-            margin-right: 10px;
-        }
+    .file-icon {
+      margin-right: 10px;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 10px;
+    }
+
+    button {
+      padding: 5px 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 3px;
+    }
+
+    .download-btn {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .delete-btn {
+      background-color: #f44336;
+      color: white;
+    }
     </style>
-</head>
-<body>
+    <script>
+    async function deleteFile(fileName) {
+      if (!confirm(`Are you sure you want to delete ${fileName}?`)) {
+        return;
+      }
+
+      const user = "{{ user }}";
+      const writePassword = "{{ write_password }}";
+
+      const deleteUrl = `/delete/${user}/${writePassword}/${fileName}`;
+
+      try {
+        const response = await fetch(deleteUrl, {
+          method: 'DELETE'
+        });
+
+        if (!response.ok) {
+          updateStatus(`Failed to delete ${fileName}: ${response.statusText}`, 'error');
+        } else {
+          updateStatus(`Successfully deleted ${fileName}`, 'success');
+          location.reload();
+        }
+      } catch (error) {
+        updateStatus(`Error deleting ${fileName}: ${error.message}`, 'error');
+      }
+    }
+
+    function updateStatus(message, type = 'info') {
+      const statusElement = document.getElementById('status');
+      const messageElement = document.createElement('p');
+      messageElement.textContent = message;
+      messageElement.style.color = type === 'error' ? 'red' : 'green';
+      statusElement.appendChild(messageElement);
+    }
+
+    function formatFileSize(size) {
+      const units = ['bytes', 'KB', 'MB', 'GB', 'TB'];
+      let unitIndex = 0;
+      let readableSize = size;
+
+      while (readableSize >= 1024 && unitIndex < units.length - 1) {
+        readableSize /= 1024;
+        unitIndex++;
+      }
+
+      return `${readableSize.toFixed(1)} ${units[unitIndex]}`;
+    }
+
+    function formatDateTime(utcTime) {
+      const date = new Date(utcTime * 1000);
+
+      return date.toLocaleString();
+    }
+
+    function getFileIconClass(fileName) {
+      const extension = fileName.split('.').pop().toLowerCase();
+      
+      switch (extension) {
+        case 'txt':
+          return 'fas fa-file-alt'; // Text file icon
+        case 'pdf':
+          return 'fas fa-file-pdf'; // PDF icon
+        case 'csv':
+          return 'fas fa-file-csv'; // CSV icon
+        case 'jpg':
+        case 'jpeg':
+        case 'png':
+        case 'gif':
+        case 'bmp':
+        case 'tiff':
+        case 'webp':
+          return 'fas fa-file-image'; // Image file icon
+        case 'zip':
+        case 'tar':
+          return 'fas fa-file-archive'; // Archive file icon
+        case 'ps':
+          return 'fas fa-file-alt'; // PostScript file icon resembling a document
+        case 'py':
+          return 'fas fa-file-code'; // Python file icon
+        case 'gp':
+        case 'plt':
+          return 'fas fa-chart-line'; // Gnuplot file icon
+        case 'xls':
+        case 'xlsx':
+          return 'fas fa-file-excel'; // Excel file icon
+        case 'dat':
+          return 'fas fa-database'; // Data file icon
+        case 'bin':
+        case 'wfm':
+        case 'mat':
+          return 'fas fa-wave-square'; // Common Keysight PathWave BenchVue Oscilloscope file icons (waveform data)
+        default:
+          return 'fas fa-file'; // Generic file icon
+      }
+    }
+
+
+    function initializeTable() {
+      document.querySelectorAll('.file-size').forEach(element => {
+      const size = parseInt(element.dataset.size, 10);
+      element.textContent = formatFileSize(size);
+    });
+
+    document.querySelectorAll('.file-mtime').forEach(element => {
+      const mtime = element.dataset.mtime;
+      element.textContent = formatDateTime(mtime);
+    });
+
+    document.querySelectorAll('.file-icon').forEach(element => {
+      const fileName = element.dataset.filename;
+      element.className = getFileIconClass(fileName) + ' file-icon'; // Set appropriate icon class
+    });
+    }
+
+    // Initialize the table formatting after the DOM content is loaded
+    document.addEventListener('DOMContentLoaded', initializeTable);
+    </script>
+  </head>
+  <body>
     <h1>Files for {{ user }}</h1>
     <table>
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>File Size</th>
-                <th>Download</th>
-            </tr>
-        </thead>
-            <tbody>
-            {% for file in files %}
-            <tr>
-                <td><i class="fas fa-file file-icon"></i>{{ file.name }}</td>
-                <td>{{ file.size }} bytes</td>
-                <td><a href="/pull/{{ user }}/{{ read_password }}/{{ file.name }}">Download</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-
-        </table>
-</body>
+      <thead>
+        <tr>
+          <th>File Name</th>
+          <th>File Size</th>
+          <th>Last Modification</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for file in files %}
+        <tr id="row-{{ file.name }}">
+          <td><i class="file-icon" data-filename="{{ file.name }}"></i>{{ file.name }}</td>
+          <td class="file-size" data-size="{{ file.size }}"></td>
+          <td class="file-mtime" data-mtime="{{ file.mtime }}"></td>
+          <td class="action-buttons">
+            <button onclick="window.location.href='/pull/{{ user }}/{{ read_password }}/{{ file.name }}'" class="download-btn">
+              Download
+            </button>
+            <button onclick="deleteFile('{{ file.name }}')" class="delete-btn">
+              Delete
+            </button>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div id="status"></div>
+  </body>
 </html>
 

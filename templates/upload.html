@@ -1,30 +1,73 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Upload File</title>
     <script>
-        function updateFormAction() {
-            var fileInput = document.getElementById('file');
-            var form = document.getElementById('uploadForm');
-            var fileName = fileInput.files[0].name;
-            var user = "{{ user }}";
-            var writePassword = "{{ write_password }}";
+    let user = "{{ user }}";
+    let writePassword = "{{ write_password }}";
 
-            // Update the form action URL to include the actual filename
-            form.action = `/push/${user}/${writePassword}/${fileName}`;
+    function updateFormAction() {
+      var fileInput = document.getElementById('file');
+      var form = document.getElementById('uploadForm');
+      
+      if (fileInput.files.length > 0) {
+        var fileName = fileInput.files[0].name;
+
+        form.action = `/push/${user}/${writePassword}/${fileName}`;
+      }
+    }
+
+    async function handleFormSubmit(event) {
+      event.preventDefault();
+
+      var fileInput = document.getElementById('file');
+      if (fileInput.files.length === 0) {
+        updateStatus('No file selected. Please choose a file first.', 'error');
+        return;
+      }
+
+      var file = fileInput.files[0];
+      var formData = new FormData();
+      formData.append('file', file);
+
+      var uploadUrl = `/push/${user}/${writePassword}/${file.name}`;
+
+      try {
+        const response = await fetch(uploadUrl, {
+          method: 'POST',
+          body: formData
+        });
+
+        if (!response.ok) {
+          updateStatus(`Failed to upload ${file.name}: ${response.statusText}`, 'error');
+        } else {
+          updateStatus(`Successfully uploaded ${file.name}`, 'success');
         }
+      } catch (error) {
+        updateStatus(`Error uploading ${file.name}: ${error.message}`, 'error');
+      }
+    }
+
+    function updateStatus(message, type = 'info') {
+      const statusElement = document.getElementById('status');
+      const messageElement = document.createElement('p');
+      messageElement.textContent = message;
+      messageElement.style.color = type === 'error' ? 'red' : 'green';
+      statusElement.appendChild(messageElement);
+    }
     </script>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Upload a File</h1>
-    <form id="uploadForm" method="post" enctype="multipart/form-data">
-        <label for="file">Choose file to upload:</label>
-        <input type="file" id="file" name="file" required onchange="updateFormAction()">
-        <br><br>
-        <input type="submit" value="Upload">
+    <form id="uploadForm" method="post" enctype="multipart/form-data" onsubmit="handleFormSubmit(event)">
+      <label for="file">Choose file to upload:</label>
+      <input type="file" id="file" name="file" required onchange="updateFormAction()">
+      <br><br>
+      <input type="submit" value="Upload">
     </form>
-</body>
+    <div id="status"></div>
+  </body>
 </html>
 

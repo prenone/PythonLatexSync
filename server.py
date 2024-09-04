@@ -166,9 +166,11 @@ def list_files():
         filepath = os.path.join(user_folder, filename)
         if os.path.isfile(filepath):
             file_size = os.path.getsize(filepath)
+            file_mtime = int(os.path.getmtime(filepath))
             files.append({
                 'name': unsanitize_filename(filename),
                 'size': file_size,
+                'mtime': file_mtime,
             })
 
     return render_template('list.html', files=files, user=user, read_password=read_password, write_password=write_password)
