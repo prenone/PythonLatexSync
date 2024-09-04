@@ -79,6 +79,21 @@ def push_file(user, write_password, filename):
     print(f'Saving "{filename}" in storage for user "{user}". Request ip address: {request.remote_addr}')
     return 'File saved successfully', 200
 
+@app.route('/delete/<user>/<write_password>/<filename>', methods=['DELETE'])
+def delete_file(user, write_password, filename):
+    if not verify_user_write(user, write_password):
+        abort(403, 'Invalid user or write_password')
+
+    filename = sanitize_filename(filename)
+    filepath = os.path.join(storage_directory, user, filename)
+
+    if not os.path.exists(filepath):
+        abort(404, 'File not found')
+    
+    os.remove(filepath)
+
+    print(f'Deleted "{filename}" from storage for user "{user}". Request ip address: {request.remote_addr}')
+    return 'File deleted successfully', 200
 
 @app.route('/pull/<user>/<read_password>/<filename>', methods=['GET'])
 def pull_file(user, read_password, filename):
@@ -156,7 +171,7 @@ def list_files():
                 'size': file_size,
             })
 
-    return render_template('list.html', files=files, user=user, read_password=read_password)
+    return render_template('list.html', files=files, user=user, read_password=read_password, write_password=write_password)
 
 @app.route('/ui/upload/', methods=['GET'])
 def upload_file():
