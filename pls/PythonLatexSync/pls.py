@@ -7,9 +7,12 @@ class PLS:
         self.read_password = read_password
         self.server_url = server_url
 
-    def push(self, filename):
+    def push(self, filename, path=None):
+        if path is None:
+            path = filename
+
         url = f"{self.server_url}/push/{self.user}/{self.write_password}/{filename}"
-        files = {'file': open(filename, 'rb')}
+        files = {'file': open(origin, 'rb')}
 
         try:
             response = requests.post(url, files=files)
