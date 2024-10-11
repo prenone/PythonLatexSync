@@ -12,7 +12,7 @@ class PLS:
             path = filename
 
         url = f"{self.server_url}/push/{self.user}/{self.write_password}/{filename}"
-        files = {'file': open(origin, 'rb')}
+        files = {'file': open(path, 'rb')}
 
         try:
             response = requests.post(url, files=files)
