@@ -1,4 +1,6 @@
 import requests
+import uuid
+import os
 
 class PLS:
     def __init__(self, user, write_password, read_password, server_url):
@@ -6,6 +8,13 @@ class PLS:
         self.write_password = write_password
         self.read_password = read_password
         self.server_url = server_url
+
+    def push_txt_str(self, filename, text):
+        tmp_filename = uuid.uuid4() + ".txt"
+        with open(tmp_filename, 'w') as f:
+            f.write(text)
+        self.push(filename, tmp_filename)
+        os.remove(tmp_filename)
 
     def push(self, filename, path=None):
         if path is None:
