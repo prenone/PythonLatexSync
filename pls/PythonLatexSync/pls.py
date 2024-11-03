@@ -10,7 +10,7 @@ class PLS:
         self.server_url = server_url
 
     def push_txt_str(self, filename, text):
-        tmp_filename = uuid.uuid4() + ".txt"
+        tmp_filename = str(uuid.uuid4()) + ".txt"
         with open(tmp_filename, 'w') as f:
             f.write(text)
         self.push(filename, tmp_filename)
